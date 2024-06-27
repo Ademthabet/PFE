@@ -1,0 +1,321 @@
+<div class="grid-container">
+    <header class="header">
+        <div class="header-right">
+            <div class="photo">
+                <a routerLink="/profileAdmin">
+                    <div *ngIf="imagePath">
+                        <img [src]="'http://127.0.0.1:8000/images/' + imagePath" alt="Photo" height='50' width="50">
+                    </div>
+                </a>
+            </div>
+            <div class="user">
+                <p><strong>{{ prenom }} {{ nom }}</strong></p>
+            </div>
+        </div>
+        <div class="header-left">
+            <button type="button" class="btn btn-outline-primary" routerLink="/">Déconnexion</button>
+        </div>
+    </header>
+    <aside id="sidebar">
+        <div class="sidebar-title">
+            <div class="sidebar-brand">
+                <img src="assets/a.jpg" alt="ASM">
+            </div>
+        </div>
+        <ul class="sidebar-list">
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/ajouterEmp">Ajouter un
+                    employé
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/modifierEmp">Modifier un
+                    employé
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/ajouterDep">Ajouter
+                    Département
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/modifierDep">Modifier
+                    Département
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/supprimerDep">Supprimer
+                    Département
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/ajouterBur">Ajouter
+                    bureau
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/modifierBur">Modifier
+                    bureau
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/supprimerBur">Supprimer
+                    bureau
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/profileAdmin">Profil
+                </button>
+            </li>
+        </ul>
+    </aside>
+    <main class="main-container">
+        <h1 style="text-align:center">Suppression d'un département</h1><br>
+        <div class="card">
+            <h4 class="card-title">Recherche d'un département</h4>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-10 d-flex align-items-center">
+                        <label for="" class="form-label me-1">Nom</label>
+                        <select class="form-select flex-grow-1 me-3" id="departementSelect"
+                            [(ngModel)]="selectedDepartementId">
+                            <option *ngFor="let departement of departements" [value]="departement.numero">{{
+                                departement.nom
+                                }}
+                            </option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-primary" (click)="search()">Chercher</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="departementForm">
+            <div *ngIf="successMessage" class="alert alert-success" style="text-align: center; font-weight: bold;">
+                {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger" style="text-align: center; font-weight: bold;">
+                {{ errorMessage }}
+            </div>
+            <div class="inputField">
+                <div class="row mb-3">
+                    <label for="code" class="col-sm-2 col-form-label">Numéro</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly name="num" formControlName="numero" class="form-control" id="num"
+                            required>
+
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="email" class="col-sm-2 col-form-label">Nom</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly name="nom" id="nom" formControlName="nom" class="form-control"
+                            required>
+                    </div>
+                </div>
+                <br>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-8 d-flex justify-content-between">
+                        <button type="submit" class="btn btn-outline-primary"
+                            (click)="supprimerDepartement()">Valider</button>
+                        <button type="submit" class="btn btn-outline-primary" (click)="annuler()">Annuler</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+</div>
+<!-- Modal de confirmation -->
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>Confirmation</h2>
+        <p>Êtes-vous sûr de vouloir supprimer ce département ?</p>
+        <div class="modal-actions">
+            <button class="btn btn-outline-primary" (click)="confirmDelete()">Confirmer</button>
+            <button class="btn btn-outline-primary" (click)="closeModal()">Annuler</button>
+        </div>
+    </div>
+</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style>
+    /* Styles pour le modal de confirmation */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        text-align: center;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+
+    
+    .card-body div {
+        padding-left: 7%;
+    }
+
+    .card-body label {
+        padding-right: 3%;
+    }
+
+    form button {
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+
+    form {
+        padding-left: 10%;
+        padding-right: 10%;
+        padding-top: 4%;
+    }
+
+    .card {
+        border: 1px solid gray;
+    }
+
+    .card-title {
+        padding-left: 3%;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: 260px 1fr 1fr 1fr;
+        grid-template-rows: 0.2fr 3fr;
+        grid-template-areas:
+            "sidebar header header header"
+            "sidebar main main main";
+        height: 100vh;
+    }
+
+    .header {
+        grid-area: header;
+        height: 70px;
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px 0 30px;
+        box-shadow: 0 6px 7px -4px rgba(99, 81, 81, 0.2);
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 75%;
+    }
+
+    .photo,
+    .user {
+        margin-right: 20px;
+    }
+
+    .btn-sidebar {
+        width: 98%;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #sidebar {
+        grid-area: sidebar;
+        border-right: 1px solid gray;
+        height: 100%;
+        background-color: white;
+        color: #9799ab;
+        overflow-y: auto;
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        box-shadow: 1px 0 5px gray;
+    }
+
+    .sidebar-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 20px 20px 20px;
+        margin-bottom: 30px;
+    }
+
+    .sidebar-title>span {
+        display: none;
+    }
+
+    .sidebar-brand {
+        margin-top: 15px;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .sidebar-list {
+        padding: 0;
+        margin-top: 15px;
+        list-style-type: none;
+    }
+
+    .sidebar-list-item {
+        padding: 20px 20px 20px 20px;
+    }
+
+    .sidebar-list-item:hover {
+        background-color: rgba(255, 255, 255, 0.959);
+        cursor: pointer;
+    }
+
+    .sidebar-list-item>a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .sidebar-responsive {
+        display: inline !important;
+        position: absolute;
+        z-index: 12 !important;
+    }
+
+    .main-container {
+        grid-area: main;
+        overflow-y: auto;
+        padding: 20px 20px;
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+</style>

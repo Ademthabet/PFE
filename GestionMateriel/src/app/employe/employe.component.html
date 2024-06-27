@@ -1,0 +1,172 @@
+<div class="grid-container">
+    <header class="header">
+        <div class="header-right">
+            <div class="photo">
+                <a routerLink="/profileEmp">
+                    <div *ngIf="imagePath">
+                        <img [src]="'http://127.0.0.1:8000/images/' + imagePath" alt="Photo"height='50' width="50">
+                    </div>
+                </a>
+            </div>
+            <div class="user">
+                <p><strong>{{ prenom }} {{ nom }}</strong></p>
+            </div>
+        </div>
+        <div class="header-left">
+            <button type="button" class="btn btn-outline-primary" routerLink="/">Déconnexion</button>
+        </div>
+    </header>
+    <aside id="sidebar">
+        <div class="sidebar-title">
+            <div class="sidebar-brand">
+                <img src="assets/a.jpg" alt="ASM">
+            </div>
+            <!-- <span class="material-icons-outlined" onclick="closeSidebar()">close</span> -->
+        </div>
+        <ul class="sidebar-list">
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/ajouteDem">Ajouter une demande
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/consulterDem">Consulter mes demades
+
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/modifierDem">Modifier une demande
+
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/supprimerDem">Supprimer une demande
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/consulterMat">Consulter mes matériels
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/profileEmp">Profil
+                </button>
+            </li>
+        </ul>
+    </aside>
+    <main class="main-container">
+        
+    </main>
+
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style>
+    .card {
+        border: 1px solid gray;
+    }
+
+    .card-title {
+        padding-left: 3%;
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: 260px 1fr 1fr 1fr;
+        grid-template-rows: 0.2fr 3fr;
+        grid-template-areas:
+            "sidebar header header header"
+            "sidebar main main main";
+        height: 100vh;
+    }
+    .header-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 75%;
+    }
+    .photo,
+    .user {
+        margin-right: 20px;
+    }
+    .header {
+        grid-area: header;
+        height: 70px;
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px 0 30px;
+        box-shadow: 0 6px 7px -4px rgba(99, 81, 81, 0.2);
+    }
+
+    .menu-icon {
+        display: none;
+    }
+    .btn-sidebar {
+        width: 92%;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #sidebar {
+        grid-area: sidebar;
+        border-right: 1px solid gray;
+        height: 100%;
+        background-color: white;
+        color: #9799ab;
+        overflow-y: auto;
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        box-shadow: 1px 0 5px gray;
+    }
+
+    .sidebar-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 20px 20px 20px;
+        margin-bottom: 30px;
+    }
+
+    .sidebar-title>span {
+        display: none;
+    }
+
+    .sidebar-brand {
+        margin-top: 15px;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .sidebar-list {
+        padding: 0;
+        margin-top: 15px;
+        list-style-type: none;
+    }
+
+    .sidebar-list-item {
+        padding: 20px 20px 20px 20px;
+    }
+
+    .sidebar-list-item:hover {
+        background-color: rgba(255, 255, 255, 0.959);
+        cursor: pointer;
+    }
+
+    .sidebar-list-item>a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .sidebar-responsive {
+        display: inline !important;
+        position: absolute;
+        z-index: 12 !important;
+    }
+    .main-container {
+        grid-area: main;
+        overflow-y: auto;
+        padding: 20px 20px;
+    }
+</style>

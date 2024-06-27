@@ -1,0 +1,264 @@
+<div class="grid-container">
+    <header class="header">
+        <div class="header-right">
+            <div class="photo">
+                <a routerLink="/profile">
+                    <div *ngIf="imagePath">
+                        <img [src]="'http://127.0.0.1:8000/images/' + imagePath" alt="Photo"height='50' width="50">
+                    </div>
+                </a>
+            </div>
+            <div class="user">
+                <p><strong>{{ prenom }} {{ nom }}</strong></p>
+            </div>
+        </div>
+        <div class="header-left">
+            <button type="button" class="btn btn-outline-primary" routerLink="/">Déconnexion</button>
+        </div>
+    </header>
+    <aside id="sidebar">
+        <div class="sidebar-title">
+            <div class="sidebar-brand">
+                <img src="assets/a.jpg" alt="ASM">
+            </div>
+        </div>
+        <ul class="sidebar-list">
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/valider">Valider
+                    demande</button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/ajouterM">Ajouter
+                    matériels
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/modifierM">Modifier
+                    matériels
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/suppM">Supprimer
+                    matériels
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/affecter">Consulter
+                    affectation
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/statistique">Statistiques
+                </button>
+            </li>
+            <li class="sidebar-list-item">
+                <button type="button" class="btn btn-outline-primary btn-sidebar" routerLink="/profile">Profil
+                </button>
+            </li>
+        </ul>
+    </aside>
+    <main class="main-container">
+            <h1 style="text-align:center">Validation d'une demande de matériels</h1><br>
+            <div class="card">
+                <div class="card-header">Liste des demandes</div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="dateDemande" class="form-label">Date d'une demande </label>
+                            <input type="date" [(ngModel)]="dateDemande" (change)="filtrerDemandes()" class="form-control"
+                                id="dateDemande" name="dateDemande">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="etatSelect" class="form-label">État de la demande </label>
+                            <select class="form-select" [(ngModel)]="etatDemande" (change)="filtrerDemandes()"
+                                id="etatSelect" aria-label="Choisir l'état">
+                                <option value="">Choisir l'état...</option>
+                                <!-- <option value="Validée">Validée</option> -->
+                                <option value="EnCours">EnCours</option>
+                                <option value="Partiellement Validée">Partiellement Validée</option>
+                                <!-- <option value="Non Validée">Non Validée</option> -->
+                            </select><br>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Numéro</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Nom</th>
+                                    <th scope="col">Prénom</th>
+                                    <th scope="col">Etat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let demande of demandesFiltrees" (click)="selectionnerDemande(demande)">
+                                    <th scope="row">{{ demande.numero }}</th>
+                                    <td>{{ demande.date }}</td>
+                                    <td>{{ demande.nom }}</td>
+                                    <td>{{ demande.prenom }}</td>
+                                    <td>{{ demande.etat }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><br>
+            <div class="card">
+                <div class="card-header">Détatils demande</div>
+                <div class="card-body">
+                    <div class="row  mb-3">
+                        <div class="col-md">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Code</th>
+                                        <th scope="col">Désignation</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Quantite</th>
+                                        <th scope="col">Etat Stock</th>
+                                        <th scope="col">Action</th>
+                                        <!-- <th scope="col">Justification</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="demandeSelectionnee">
+                                    <tr *ngFor="let ligneDemande of lignesDemande; let i = index">
+                                        <th scope="row"> {{ ligneDemande.code }}</th>
+                                        <td>{{ ligneDemande.designation }}</td>
+                                        <td>{{ ligneDemande.description }}</td>
+                                        <td>{{ ligneDemande.type }}</td>
+                                        <td>{{ ligneDemande.quantiteDem }}</td>
+                                        <td>{{ ligneDemande.quantite }}</td>
+                                        <td>
+                                            <select class="form-select" id="etatSelect{{i}}"
+                                                [(ngModel)]="ligneDemande.newEtat" id="etatSelect"
+                                                aria-label="Choisir l'état">
+                                                <option value="">Choisir l'état...</option>
+                                                <option value="Validée">Validée</option>
+                                                <option value="Non Validée">Non Validée</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+            <div class="row mb-3 justify-content-center">
+                <div class="col-sm-4 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-outline-primary" (click)="validerDemandes()">Valider</button>
+                    <button type="submit" class="btn btn-outline-primary" (click)="annuler()">Annuler</button>
+                </div>
+            </div>
+    </main>
+</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style>
+    .etat {
+        padding-left: 5%;
+    }
+    .card-title {
+        padding-left: 3%;
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: 260px 1fr 1fr 1fr;
+        grid-template-rows: 0.2fr 3fr;
+        grid-template-areas:
+            "sidebar header header header"
+            "sidebar main main main";
+        height: 100vh;
+    }
+    .header {
+        grid-area: header;
+        height: 70px;
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px 0 30px;
+        box-shadow: 0 6px 7px -4px rgba(99, 81, 81, 0.2);
+    }
+    .header-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 75%;
+    }
+    .photo,
+    .user {
+        margin-right: 20px;
+    }
+    .menu-icon {
+        display: none;
+    }
+    .btn-sidebar {
+        width: 92%;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #sidebar {
+        grid-area: sidebar;
+        border-right: 1px solid gray;
+        height: 100%;
+        background-color: white;
+        color: #9799ab;
+        overflow-y: auto;
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        box-shadow: 1px 0 5px gray;
+    }
+    .sidebar-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 20px 20px 20px;
+        margin-bottom: 30px;
+    }
+    .sidebar-title>span {
+        display: none;
+    }
+    .sidebar-brand {
+        margin-top: 15px;
+        font-size: 20px;
+        font-weight: 700;
+    }
+    .sidebar-list {
+        padding: 0;
+        margin-top: 15px;
+        list-style-type: none;
+    }
+    .sidebar-list-item {
+        padding: 20px 20px 20px 20px;
+    }
+    .sidebar-list-item:hover {
+        background-color: rgba(255, 255, 255, 0.959);
+        cursor: pointer;
+    }
+    .sidebar-list-item>a {
+        text-decoration: none;
+        color: black;
+    }
+    .sidebar-responsive {
+        display: inline !important;
+        position: absolute;
+        z-index: 12 !important;
+    }
+    .main-container {
+        grid-area: main;
+        overflow-y: auto;
+        padding: 20px 20px;
+    }
+
+    .main-container button {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .card {
+        border: 1px solid gray;
+    }
+</style>
