@@ -61,7 +61,7 @@ class LigneDemandeController extends Controller
         $ligneDemande->save();
         return response()->json(['message' => 'Quantité et ID du matériel mis à jour avec succès'], 200);
     }
-    public function modifierEtatLigne(Request $request, $id)
+    public function updateEtatLigne(Request $request, $id)
     {
         $ligneDemande = LigneDemande::findOrFail($id);
         $request->validate([

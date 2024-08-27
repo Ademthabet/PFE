@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CreerCompteService } from '../creer-compte/creer-compte.service';
+import { CreerCompteService } from '../createAccount/creer-compte.service';
 import { PhotoService } from './photo.service';
 
 @Component({
@@ -10,9 +10,9 @@ import { PhotoService } from './photo.service';
 export class RmComponent implements OnInit {
   nom: string = '';
   prenom: string = '';
-  imagePath:string='';
+  imagePath: string = '';
   photos: any[] = [];
-  id:any=0;
+  id: any = 0;
   constructor(
     private employeService: CreerCompteService,
     private photoService: PhotoService,
@@ -22,7 +22,7 @@ export class RmComponent implements OnInit {
   ngOnInit(): void {
     this.nom = this.employeService.getData('nom') || '';
     this.prenom = this.employeService.getData('prenom') || '';
-    this.id=this.employeService.getData( "id" ) || '';
+    this.id = this.employeService.getData("id") || '';
     this.getPhotos(this.id);
   }
   getPhotos(id: any): void {
@@ -32,7 +32,7 @@ export class RmComponent implements OnInit {
           this.photos = response.photos;
           console.log('Fetched Photos:', this.photos);
           if (this.photos.length > 0) {
-            this.imagePath =  this.photos[0].nom; 
+            this.imagePath = this.photos[0].nom;
             console.log('Image Path:', this.imagePath);
           }
         } else {
