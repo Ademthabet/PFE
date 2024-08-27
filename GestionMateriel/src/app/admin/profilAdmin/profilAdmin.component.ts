@@ -1,30 +1,32 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { PhotoService } from '../photo.service';
-import { CreerCompteService } from 'src/app/createAccount/creer-compte.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Route, Router } from '@angular/router';
+import { CreerCompteService, Employe } from 'src/app/createAccount/creer-compte.service';
+import { PhotoService } from 'src/app/rm/photo.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'app-profile-admin',
+  templateUrl: './profilAdmin.component.html',
+  styleUrls: ['./profilAdmin.component.scss']
 })
-export class ProfileComponent implements OnInit {
-  imagePath: string = '';
-  photos: any[] = [];
-  id: any = 0;
+export class ProfileAdminComponent implements OnInit {
   nom: string = '';
   prenom: string = '';
   role: string = '';
-  employeForm: FormGroup;
+  id: any = 0;
+  employeForm: FormGroup
   errorMessage: string = '';
   successMessage: string = '';
   bureau: any;
   departement: any;
+  imagePath: string = '';
+  photos: any[] = [];
   selectedFile: File | null = null;
   constructor(
-    private photoService: PhotoService,
-    private employeService: CreerCompteService,
+    private employeServicee: CreerCompteService,
     public formBuilder: FormBuilder,
+    private photoService: PhotoService,
   ) {
     this.employeForm = this.formBuilder.group({
       nom: [''],
@@ -37,12 +39,11 @@ export class ProfileComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.nom = this.employeService.getData('nom') || '';
-    this.prenom = this.employeService.getData('prenom') || '';
-    this.id = this.employeService.getData("id") || '';
-    this.role = this.employeService.getData('role') || '';
-    this.getPhotos(this.id);
-    this.employeService.getDetailsEmploye(this.id).subscribe(
+    this.nom = this.employeServicee.getData('nom') || '';
+    this.prenom = this.employeServicee.getData('prenom') || '';
+    this.role = this.employeServicee.getData('role') || '';
+    this.id = this.employeServicee.getData('id') || '';
+    this.employeServicee.getDetailsEmploye(this.id).subscribe(
       (data: any) => {
         this.bureau = data.bureau;
         this.departement = data.bureau.departement_nom;
@@ -51,6 +52,7 @@ export class ProfileComponent implements OnInit {
         console.error('Erreur lors de la récupération des détails du bureau et du département :', error);
       }
     );
+    this.getPhotos(this.id)
   }
   getPhotos(id: any): void {
     this.photoService.getPhotosByEmployeeId(id).subscribe({
@@ -85,7 +87,7 @@ export class ProfileComponent implements OnInit {
       tel: this.employeForm.value.tel
     };
     console.log(updatedEmployeData);
-    this.employeService.modification(this.id, updatedEmployeData).subscribe(
+    this.employeServicee.modification(this.id, updatedEmployeData).subscribe(
       () => {
         console.log('Employé modifié avec succès');
         this.successMessage = 'Profil modifié avec succès';
@@ -93,12 +95,12 @@ export class ProfileComponent implements OnInit {
         this.employeForm.reset();
         this.nom = updatedEmployeData.nom;
         this.prenom = updatedEmployeData.prenom;
-        this.employeService.saveData('prenom', this.prenom);
-        this.employeService.saveData('nom', this.nom);
+        this.employeServicee.saveData('prenom', this.prenom);
+        this.employeServicee.saveData('nom', this.nom);
       },
       error => {
         console.error('Erreur lors de la modification de l\'employé :', error);
-        this.errorMessage = 'Veuillez remplir tous les champs.';
+        this.errorMessage = 'Erreur lors de la modification de profil';
       }
     );
   }
@@ -108,6 +110,7 @@ export class ProfileComponent implements OnInit {
       this.selectedFile = file;
       const formData = new FormData();
       formData.append('photo', file);
+
       this.photoService.uploadPhotoEmploye(this.id, formData).subscribe(
         (response: any) => {
           console.log('Photo uploaded successfully!', response);

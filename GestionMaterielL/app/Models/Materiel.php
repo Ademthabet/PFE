@@ -9,11 +9,11 @@ class Materiel extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'code', 'designation', 'description', 'type','quantite','bureaus_id','employe_id'
+        'code', 'designation', 'description', 'type','quantite','bureau_id','employe_id'
     ];
     public function bureaux()
     {
-        return $this->belongsTo(Bureau::class, "bureaus_id");
+        return $this->belongsTo(Bureau::class, "bureau_id");
     }
     public function employes()
     {

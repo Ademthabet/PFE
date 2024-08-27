@@ -32,7 +32,8 @@ Route::prefix('bureau')->group(function () {
 });
 Route::prefix('employe')->group(function () {
     Route::get('/details/{id}', [EmployeController::class, 'details']);
-    Route::put('/create/{id}',[ EmployeController::class, 'modifierEmploye']);
+    /////update f blast create
+    Route::put('/update/{id}',[ EmployeController::class, 'updateEmploye']);
     Route::post('/addEmploye',[ EmployeController::class, 'addEmploye']);
     Route::get('/',[ EmployeController::class, 'getAll']);
     Route::put('/{id}',[ EmployeController::class, 'update']);
@@ -74,7 +75,8 @@ Route::prefix('ligneDemande')->group(function () {
     Route::delete('/{id}',[ LigneDemandeController::class, 'deleteLigneDemande']);
     Route::post('/store',[ LigneDemandeController::class, 'store']);
     Route::put('/ligneDemande/{id}',[ LigneDemandeController::class, 'updateQuantiteAndMaterielId']);
-    Route::put('/modifierEtatLigne/{id}',[ LigneDemandeController::class, 'modifierEtatLigne']);
+    /////
+    Route::put('/updateEtatLigne/{id}',[ LigneDemandeController::class, 'updateEtatLigne']);
     Route::put('/updateStockQuantity/{id}',[ LigneDemandeController::class, 'updateStockQuantity']);
 });
 Route::prefix('statistiques')->group(function () { 

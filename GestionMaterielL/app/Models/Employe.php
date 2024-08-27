@@ -10,11 +10,11 @@ class Employe extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'code', 'nom', 'prenom','dateRecrutement','email','password','tel', 'role','bureaus_id'
+        'code', 'nom', 'prenom','dateRecrutement','email','password','tel', 'role','bureau_id'
     ];
     public function bureaux()
     {
-        return $this->belongsTo(Bureau::class, "bureaus_id");
+        return $this->belongsTo(Bureau::class, "bureau_id");
     }
     public function materiels()
     {
