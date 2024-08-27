@@ -16,6 +16,8 @@ export class Departement {
   styleUrls: ['./addBureau.component.scss']
 })
 export class AjouterBurComponent implements OnInit {
+
+
   bureauForm: FormGroup;
   departements: Departement[] = [];
   successMessage: string = '';
