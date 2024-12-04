@@ -25,7 +25,7 @@ class EmployeController extends Controller
             return response()->json(['error' => 'Une erreur s\'est produite lors de la récupération des détails de l\'employé.'], 500);
         }
     }
-    public function modifierEmploye(Request $request, $id)
+    public function updateEmploye(Request $request, $id)
     {
         $employe = Employe::findOrFail($id);
         if ($request->has('nom')) {
